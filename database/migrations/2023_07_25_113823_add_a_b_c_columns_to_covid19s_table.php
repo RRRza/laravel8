@@ -14,12 +14,9 @@ class AddABCColumnsToCovid19sTable extends Migration
     public function up()
     {
         Schema::table('covid19s', function (Blueprint $table) {
-            //
-
-            $table->float('a', 16, 2)->nullable();          //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
-            $table->float('remark', 16, 2)->nullable();     //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
-            $table->float('c', 16, 2)->nullable();          //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
-
+            $table->float('a',16,2)->nullable();          //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
+            $table->float('remark',16,2)->nullable();     //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
+            $table->float('c',16,2)->nullable();          //เพิ่มคอลัมน์ใหม่ type float 16 bit 2 จุดทศนิยม null ได้
         });
     }
 
