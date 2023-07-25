@@ -15,16 +15,11 @@ class Covid19Controller extends Controller
      */
     public function index()
     {
-        //
-        //sql
-        //$sql = "select * from covid19s";
-        //$covid19s = DB::select($sql, []);
-
-
-        //orm
-        $covid19s = Covid19::get();
-        return view('covid19/index', compact('covid19s'));
-       
+        $sql = "select * from covid19s";
+	  
+  	$covid19s = DB::select($sql, []);
+    	
+     return view('covid19/index' , compact('covid19s') );
     }
 
     /**
