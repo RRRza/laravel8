@@ -4,7 +4,7 @@ use App\Http\Controllers\Covid19Controller;
 use App\Http\Controllers\MyProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\StaffController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,3 +118,14 @@ Route::delete("/product/{id}", [ProductController::class, "destroy"])->name('pro
 
 // Route::resource('/product', ProductController::class );
 
+Route::get("/staff", [StaffController::class, "index"])->name('staff.index');
+Route::get("/staff/create", [StaffController::class, "create"])->name('staff.create');
+Route::get("/staff/{id}", [StaffController::class, "show"])->name('staff.show');
+Route::get("/staff/{id}/edit", [StaffController::class, "edit"])->name('staff.edit');
+Route::delete("//{id}", [StaffController::class, "destroy"])->name('staff.destroy');
+
+Route::get("/staff", function () {
+    return view("staff");});
+
+Route::get("/staff", function () {
+    return view("staff");});
