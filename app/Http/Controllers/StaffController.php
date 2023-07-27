@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staff;
 use Illuminate\Http\Request;
-use app\Models\Staff;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 
 class StaffController extends Controller
 {
@@ -23,7 +22,7 @@ class StaffController extends Controller
 
         if (!empty($keyword)) {
             //CASE SEARCH, show some
-            $products = Staff::where('title', 'LIKE', "%$keyword%")
+            $staff = staff::where('title', 'LIKE', "%$keyword%")
                 // ->orWhere('content', 'LIKE', "%$keyword%")
                 // ->orWhere('price', 'LIKE', "%$keyword%")
                 // ->orWhere('cost', 'LIKE', "%$keyword%")
@@ -32,11 +31,12 @@ class StaffController extends Controller
                 ->latest()->paginate($perPage);
         } else {
             // CASE NOT SEARCH, show all
-            $products = Staff::latest()->paginate($perPage);
+            $staff = staff::latest()->paginate($perPage);
         }
 
-        return view('staff.index', compact('staff'));
-        // return view('staff.index',compact('products'))->with('i', (request()->input('page', 1) - 1) * 5);
+      //  return view('staff.index', compact('staff'));
+         return view('staff.index', compact('staff'));
+        // return view('staff.index',compact('staff'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -61,7 +61,7 @@ class StaffController extends Controller
         //validation
         $request->validate([
             'title' => 'required',
-            'phone' => 'required',
+            //'birthday' => 'required',
             // 'photo' => 'required',
         ]);
 
@@ -71,13 +71,13 @@ class StaffController extends Controller
         // FOR UPLOAD
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('', 'public');
-            
+            $requestData['photo'] = url(Storage::url($path));
         }
 
         //CREATE A RECORD
-       Staff::create($requestData);
+        staff::create($requestData);
 
-        return redirect('product')->with('success', 'Product created successfully.');
+        return redirect('staff')->with('success', 'staff created successfully.');
     }
 
     /**
@@ -89,7 +89,7 @@ class StaffController extends Controller
     public function show($id)
     {
         //QUERY by id
-        $product = Staff::findOrFail($id);
+        $staff = staff::findOrFail($id);
 
         return view('staff.show', compact('staff'));
     }
@@ -103,7 +103,7 @@ class StaffController extends Controller
     public function edit($id)
     {
         //QUERY by id
-        $product = staff::findOrFail($id);
+        $staff = staff::findOrFail($id);
 
         return view('staff.edit', compact('staff'));
     }
@@ -121,7 +121,7 @@ class StaffController extends Controller
         //validation
         $request->validate([
             'title' => 'required',
-            'price' => 'required',
+            //'birthday' => 'required',
             // 'photo' => 'required',
         ]);
 
@@ -131,14 +131,14 @@ class StaffController extends Controller
         // FOR UPLOAD A NEW FILE WITHOUT DELETE THE OLD FILE
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('', 'public');
-            
+            $requestData['photo'] = url(Storage::url($path));
         }
 
         //UPDATE A RECORD
-        $staff = Staff::findOrFail($id);
+        $staff = staff::findOrFail($id);
         $staff->update($requestData);
 
-        return redirect('product')->with('success', 'Product updated successfully.');
+        return redirect('staff')->with('success', 'staff updated successfully.');
     }
 
     /**
@@ -152,6 +152,6 @@ class StaffController extends Controller
         //DELETE by id
         Staff::destroy($id);
 
-        return redirect('product')->with('success', 'Product deleted successfully.');
+        return redirect('staff')->with('success', 'staff deleted successfully.');
     }
 }

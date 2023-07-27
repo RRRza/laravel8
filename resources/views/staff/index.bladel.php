@@ -1,67 +1,54 @@
-<x-bootstrap title="Products">
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <a class="btn btn-success" href="{{ route('product.create') }}"> Create New Product</a>
-        </div>
-        <div class="col-lg-4">
-            <form method="GET" action="{{ route('product.index') }}" class="form-inline">
-                <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search..."
-                        value="{{ request('search') }}">
-                    <span class="input-group-append">
-                        <button class="btn btn-secondary" type="submit">
-                            {{-- <i class="fa fa-search"></i> --}}
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </span>
-                </div>
-            </form>
+<x-bootstrap title="Edit staff">
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="py-4">
+                <a class="btn btn-primary" href="{{ route('staff.index') }}"> Back</a>
+            </div>
         </div>
     </div>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
 
-    <table class="table my-4">
-        <tr>
-            <th>#</th>
-            <th>Photo</th>
-            <th>Title</th>
-            <th>Birthday</th>
-            <th>Salary</th>
-            <th>phone</th>
-            <th width="280px">Action</th>
-        </tr>
-        @foreach ($products as $item)
-            <tr>
-                <td>{{ $item->id }}</td>
-                <td>
-                    <img src="{{ $item->photo }}" height="100" />
-                </td>
-                <td>{{ $item->title }}</td>
-                <td>{{ $item->content }}</td>
-                <td>{{ $item->Salary }}</td>
-                <td>{{ $item->phone }}</td>
-                <td>
-                    <div class="d-flex justify-content-around px-4">
-                        <a class="btn btn-info" href="{{ route('product.show', $item->id) }}">Show</a>
+    <form action="{{ route('staff.update', $staff->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PATCH')
 
-                        <a class="btn btn-primary" href="{{ route('product.edit', $item->id) }}">Edit</a>
+        <div class="row g-4">
+            <div class="col-md-12">
+                <strong>Title: <span class="text-danger">*</span> </strong>
+                <input type="text" name="title" class="form-control" value="{{ $staff->title }}" required>
+            </div>
+            <div class="col-md-12">
+                <strong>Salary: <span class="text-danger">*</span> </strong>
+                <input type="number" name="Salary" class="form-control" value="{{ $staff->salary }}" required>
+            </div>
+            <div class="col-md-12">
+                <strong>Photo: </strong>
+                <input type="file" name="photo" class="form-control" value="{{ $staff->photo }}" >
+                <img src="{{ $staff->photo }}" height="150" />
+            </div>
+            <div class="col-md-12">
+                <strong>Birthdate:</strong>
+                <textarea class="form-control" style="height:150px" name="birthdate" > {{ $staff->birthdate }}</textarea>
+            </div>
+            <div class="col-md-12">
+                <strong>phone: </strong>
+                <input type="number" name="phone" class="form-control" value="{{ $staff->phone }}">
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
 
-                        <form action="{{ route('product.destroy', $item->id) }}" method="POST"
-                            onsubmit="return confirm('Confirm delete?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-    </table>
 
-    <div class="mt-4">{{ $staff->appends(['search' => request('search')])->links() }}</div>
+    </form>
 </x-bootstrap>
