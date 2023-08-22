@@ -134,14 +134,3 @@ Route::delete("/product/{id}", [ProductController::class, "destroy"])->name('pro
 
 Route::resource('/product', ProductController::class );
 Route::resource("/staff", StaffController::class);
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-require __DIR__.'/auth.php';
- 
