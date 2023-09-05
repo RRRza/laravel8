@@ -29,5 +29,19 @@ class Quotation extends Model
      */
     protected $fillable = ['customer_id', 'user_id', 'vat_percent', 'vat', 'sub_total', 'net_total', 'remark'];
 
-    
+    public function quotationDetails()
+    {
+        return $this->hasMany(QuotationDetail::class, 'quotation_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }
