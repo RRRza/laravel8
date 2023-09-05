@@ -5,6 +5,10 @@ use App\Http\Controllers\MyProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Models\Staff;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;  
+use App\Http\Controllers\UserController;  
+use App\Http\Controllers\VehicleController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -145,3 +149,11 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
  
+//Route::resource('post', 'PostController');
+Route::resource('post', PostController::class);
+Route::resource('profile', 'ProfileController');
+Route::resource('user', 'UserController');
+Route::resource('vehicle', 'VehicleController');
+Route::resource('profile', ProfileController::class);
+Route::resource('user', UserController::class);
+Route::resource('vehicle', VehicleController::class);
