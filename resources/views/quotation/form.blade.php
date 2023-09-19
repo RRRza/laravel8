@@ -1,11 +1,29 @@
 <div class="form-group {{ $errors->has('customer_id') ? 'has-error' : ''}}">
     <label for="customer_id" class="control-label">{{ 'Customer Id' }}</label>
-    <input class="form-control" name="customer_id" type="number" id="customer_id" value="{{ isset($quotation->customer_id) ? $quotation->customer_id : ''}}" >
+    <!-- <input class="form-control" name="customer_id" type="number" id="customer_id" value="{{ isset($quotation->customer_id) ? $quotation->customer_id : ''}}" > -->
+    <select class="form-select" name="customer_id" id="customer_id" required>
+        <option value="">เลือกลูกค้า</option>
+        @foreach($customers as $item)
+        <option value="{{ $item->id }}">{{ $item->name }}</option>
+        @endforeach
+    </select>
+    <script>
+        document.querySelector("#customer_id").value = "{{ isset($quotation->customer_id) ? $quotation->customer_id : ''}}";
+    </script>
     {!! $errors->first('customer_id', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('user_id') ? 'has-error' : ''}}">
     <label for="user_id" class="control-label">{{ 'User Id' }}</label>
-    <input class="form-control" name="user_id" type="number" id="user_id" value="{{ isset($quotation->user_id) ? $quotation->user_id : ''}}" >
+    <!-- <input class="form-control" name="user_id" type="number" id="user_id" value="{{ isset($quotation->user_id) ? $quotation->user_id : ''}}" > -->
+    <select class="form-select" name="user_id" id="user_id" required>
+        <option value="">เลือกพนักงานขาย</option>
+        @foreach($users as $item)
+        <option value="{{ $item->id }}">{{ $item->name }}</option>
+        @endforeach
+    </select>
+    <script>
+        document.querySelector("#user_id").value = "{{ isset($quotation->user_id) ? $quotation->user_id : Auth::id()}}";
+    </script>
     {!! $errors->first('user_id', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('vat_percent') ? 'has-error' : ''}}">

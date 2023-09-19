@@ -25,20 +25,53 @@
                             </div>
                         </div>
 
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>Customer Id</th><th>User Id</th><th>Vat Percent</th><th>Vat</th><th>Sub Total</th><th>Net Total</th><th>Remark</th><th>Actions</th>
+                                        <th>#</th>
+                                        <th>Customer Id</th>
+                                        <th>User Id</th>
+                                        <th>Vat Percent</th>
+                                        <th>Vat</th>
+                                        <th>Sub Total</th>
+                                        <th>Net Total</th>
+                                        <th>Remark</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($quotation as $item)
+                                    @foreach($quotation as $item)
+
+                                    @php
+                                    // CALCULATE
+                                    $net_total = $item->quotationDetails()->sum('total');
+                                    $vat = ($item->vat_percent / 100) * $net_total;
+                                    $sub_total = $net_total - $vat;
+                                    // FORMAT
+                                    $net_total = number_format($net_total, 2);
+                                    $vat = number_format($vat, 2);
+                                    $sub_total = number_format($sub_total, 2);
+                                    @endphp
+
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->customer_id }}</td><td>{{ $item->user_id }}</td><td>{{ $item->vat_percent }}</td><td>{{ $item->vat }}</td><td>{{ $item->sub_total }}</td><td>{{ $item->net_total }}</td><td>{{ $item->remark }}</td>
+                                        <!-- <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->customer_id }}</td>
+                                        <td>{{ $item->user_id }}</td>
+                                        <td>{{ $item->vat_percent }}</td>
+                                        <td>{{ $item->vat }}</td>
+                                        <td>{{ $item->sub_total }}</td>
+                                        <td>{{ $item->net_total }}</td> -->
+                                        <td>{{ sprintf('Q%03d', $item->id) }}</td>
+                                        <td>{{ $item->customer->name }}</td>
+                                        <td>{{ $item->user->name }}</td>
+                                        <td>{{ $item->vat_percent }}%</td>
+                                        <td>{{ $vat }}</td>
+                                        <td>{{ $sub_total }}</td>
+                                        <td>{{ $net_total }}</td>
+                                        <td>{{ $item->remark }}</td>
                                         <td>
                                             <a href="{{ url('/quotation/' . $item->id) }}" title="View Quotation"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/quotation/' . $item->id . '/edit') }}" title="Edit Quotation"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
@@ -50,7 +83,7 @@
                                             </form>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @endforeach
                                 </tbody>
                             </table>
                             <div class="pagination-wrapper"> {!! $quotation->appends(['search' => Request::get('search')])->render() !!} </div>

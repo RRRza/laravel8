@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-
+use App\Models\Customer;
 use App\Models\Quotation;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class QuotationController extends Controller
@@ -43,7 +45,10 @@ class QuotationController extends Controller
      */
     public function create()
     {
-        return view('quotation.create');
+        $users = User::get();
+        $customers = Customer::get();
+    
+        return view('quotation.create', compact('users', 'customers'));
     }
 
     /**
@@ -87,8 +92,11 @@ class QuotationController extends Controller
     public function edit($id)
     {
         $quotation = Quotation::findOrFail($id);
+        $users = User::get();
+         $customers = Customer::get();
 
-        return view('quotation.edit', compact('quotation'));
+
+        return view('quotation.edit', compact('quotation', 'users', 'customers'));
     }
 
     /**
@@ -123,4 +131,14 @@ class QuotationController extends Controller
 
         return redirect('quotation')->with('flash_message', 'Quotation deleted!');
     }
+
+    public function pdf($id)
+{
+    $quotation = Quotation::findOrFail($id);
+
+    // return view('quotation.show', compact('quotation'));
+    $pdf = Pdf::loadView('quotation.pdf', compact('quotation'));
+    return $pdf->stream("quotation-{$id}.pdf");
+}
+
 }
