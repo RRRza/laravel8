@@ -13,6 +13,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationDetailController;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\LeaveTypeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +56,7 @@ Route::get("/gallery", function () {
     $bird = "https://images.indianexpress.com/2021/03/falcon-anthony-mackie-1200.jpg";
     $cat = "http://www.onyxtruth.com/wp-content/uploads/2017/06/black-panther-movie-onyx-truth.jpg";
     $god = "https://www.blackoutx.com/wp-content/uploads/2021/04/Thor.jpg";
-    $spider = "https://icdn5.digitaltrends.com/image/spiderman-far-from-home-poster-2-720x720.jpg";
+    $spider = "https://assets-prd.ignimgs.com/2022/03/18/spidermannowayhomeexclusivefirst10minutesignblogroll-1647047297213-1647633871978.jpeg?width=1920";
     return view("test/index", compact("ant", "bird", "cat", "god", "spider"));
 });
 
@@ -184,4 +187,20 @@ Route::get('/test/pdf', function(){
     $c = "ทดสอบภาษาไทย";
     $pdf = Pdf::loadView('testpdf', compact('a','b','c'));
     return $pdf->stream();
+});
+
+// Route::resource('leave-request', 'LeaveRequestController');
+// Route::resource('leave-type', 'LeaveTypeController');
+
+Route::middleware(['auth'])->group(function () {
+    Route::middleware(['role:admin,guest'])->group(function () {
+        Route::resource('leave-request', LeaveRequestController::class)->except(['edit','update']);
+    });
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('leave-request', LeaveRequestController::class)->only(['edit','update']);
+        Route::resource('leave-type', LeaveTypeController::class);
+        Route::get("dashboard-leave", function () {
+            return view("dashboard-leave");
+        });
+    });
 });
